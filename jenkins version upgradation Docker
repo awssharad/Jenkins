@@ -1,0 +1,25 @@
+# I'll keep it as "jenkins", you can use "jenkins_home" if you wish
+mkdir -p $HOME/jenkins
+# if you're using other names, replace $HOME/jenkins with your choice
+# in case you want to change port, use this
+# -e JENKINS_OPTS="--httpPort=80" (remember to change 8080:8080 below to 80:80)
+docker container run \
+--name jenkins \
+-p 8080:8080 -p 50000:50000 \
+-v $HOME/jenkins:/var/jenkins_home \
+-d \
+jenkins
+
+#using host's root with -u 0
+docker container exec -u 0 -it jenkins bash
+# inside the container, using 2.89.2 as example
+wget http://updates.jenkins-ci.org/download/war/2.89.2/jenkins.war
+mv ./jenkins.war /usr/share/jenkins
+# exit contaienr (inside container)
+exit
+# restart container (from your server)
+docker container restart jenkins
+chown jenkins:jenkins /usr/share/jenkins/jenkins.war (updated)
+# exit contaienr (inside container)
+exit
+# restart container (from your server)
